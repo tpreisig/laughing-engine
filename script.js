@@ -3,9 +3,9 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-class Number {
+class Bytecode {
     constructor(x, y, fontSize, canvasHeight) {
-        this.characters = "0101001";
+        this.characters = "10101001";
         this.x = x;
         this.y = y;
         this.fontSize = fontSize;
@@ -23,30 +23,30 @@ class Number {
         }
     }
 }
-class Board {
+class Machine {
     constructor(canvasWidth, canvasHeight) {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.fontSize = 27;
         this.columns = this.canvasWidth / this.fontSize;
-        this.numbers = [];
+        this.bytecode = [];
         this.#initalize();
-        console.log(this.numbers);
+        console.log(this.bytecode);
     }
     #initalize() { /* private method */
         for (let i = 0; i < this.columns; i++) {
-            this.numbers[i] = new Number(i, 0, this.fontSize, this.canvasHeight);
+            this.bytecode[i] = new Bytecode(i, 0, this.fontSize, this.canvasHeight);
         }
     }
     resize(width, height) {
         this.canvasWidth = width;
         this.canvasHeight = height;
         this.columns = this.canvasWidth / this.fontSize;
-        this.numbers = [];
+        this.bytecode = [];
         this.#initalize();
     }
 }
-const board = new Board(canvas.width, canvas.height);
+const machine = new Machine(canvas.width, canvas.height);
 
 const fPerSecond = 20;
 const nextFrame = 1000 / fPerSecond;
@@ -60,8 +60,8 @@ function animate(timeStamp) {
         ctx.fillStyle = "rgba(0,0,0,0.1)";
         ctx.textAlign = "center";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.font = board.fontSize + "px monospace";
-        board.numbers.forEach(number => number.draw(ctx));
+        ctx.font = machine.fontSize + "px monospace";
+        machine.bytecode.forEach(zeroOrOne => zeroOrOne.draw(ctx));
         timer = 10;
     } else {
         timer += deltaTime;
@@ -73,5 +73,5 @@ animate(0);
 window.addEventListener('resize', function () {
     canvas.width = window.innerWidth,
         canvas.height = window.innerHeight;
-    board.resize(canvas.width, canvas.height)
+    machine.resize(canvas.width, canvas.height)
 })
